@@ -18,32 +18,32 @@ coins_dict = {
   'Eithereum': 1000
 }
 
+Aphase = 'UP1'
+# UP1 UP2 DOWN1 DOWN2
 def Achange(A, nowt):
-  return A
+  global Aphase
+  if A > 2000:
+    Aphase = 'DOWN1'
+  elif A < 500:
+    Aphase = 'UP2'
+  elif Aphase == 'UP2' and A > 1500:
+    Aphase = 'DOWN2'
+  if Aphase == 'UP1':
+    return A + random.randrange(-20, 60)
+  elif Aphase == 'UP2':
+    return A + random.randrange(-20, 100)
+  elif Aphase == 'DOWN1':
+    return A + random.randrange(-100, 20)
+  else:
+    return A + random.randrange(-30, 20)
 
 def Bchange(B, nowt):
   if random.random() > 0.95:
     B += 100
   return B + random.randrange(-2, 16)
 
-Cphase = 'UP1'
-# UP1 UP2 DOWN1 DOWN2
 def Cchange(C, nowt):
-  global Cphase
-  if C > 2000:
-    Cphase = 'DOWN1'
-  elif C < 500:
-    Cphase = 'UP2'
-  elif Cphase == 'UP2' and C > 1500:
-    Cphase = 'DOWN2'
-  if Cphase == 'UP1':
-    return C + random.randrange(-20, 60)
-  elif Cphase == 'UP2':
-    return C + random.randrange(-20, 100)
-  elif Cphase == 'DOWN1':
-    return C + random.randrange(-100, 20)
-  else:
-    return C + random.randrange(-30, 20)
+  return C
 
 def Dchange(D, nowt):
   if D == 0:
@@ -51,7 +51,7 @@ def Dchange(D, nowt):
   nomean = random.random() > 0.5
   nomean2 = random.random() > 0.4
   if nomean2:
-    D += random.randrange(-30, 30)
+    D += random.randrange(-30, 31)
   elif nomean:
     D*=1.2
   else:
@@ -66,7 +66,7 @@ def Echange(E, nowt):
   if E==0:
     return 0
   if nowt>82:
-    E += random.randrange(-30, 250)
+    E += random.randrange(-30, 251)
   else:
     E += random.randrange(-30, 6)
   if E<=0:
