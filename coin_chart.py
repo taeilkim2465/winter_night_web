@@ -18,10 +18,23 @@ coins_dict = {
   'Eithereum': 1000
 }
 
+Color_dict = {
+  'RED': (255, 0, 0),
+  'BLUE': (0, 0, 255),
+  'GRAY': (155, 155, 155)
+}
+
+A_Color = 'GRAY'
+B_Color = 'GRAY'
+C_Color = 'GRAY'
+D_Color = 'GRAY'
+E_Color = 'GRAY'
+
 Aphase = 'UP1'
 # UP1 UP2 DOWN1 DOWN2
 def Achange(A, nowt):
-  global Aphase
+  global Aphase, A_Color
+  A_dif = 0
   if A > 2000:
     Aphase = 'DOWN1'
   elif A < 500:
@@ -29,50 +42,106 @@ def Achange(A, nowt):
   elif Aphase == 'UP2' and A > 1500:
     Aphase = 'DOWN2'
   if Aphase == 'UP1':
-    return A + random.randrange(-20, 60)
+    A_dif = random.randrange(-20, 71)
   elif Aphase == 'UP2':
-    return A + random.randrange(-20, 100)
+    A_dif = random.randrange(-20, 101)
   elif Aphase == 'DOWN1':
-    return A + random.randrange(-100, 20)
+    A_dif = random.randrange(-100, 21)
   else:
-    return A + random.randrange(-30, 20)
+    A_dif = random.randrange(-30, 21)
+  if A_dif > 0:
+    A_Color = 'RED'
+  elif A_dif < 0:
+    A_Color = 'BLUE'
+  else:
+    A_Color = 'GRAY'
+  return A + A_dif
 
 def Bchange(B, nowt):
+  global B_Color
+  B_dif = 0
   if random.random() > 0.95:
-    B += 100
-  return B + random.randrange(-2, 16)
+    B_dif = 100
+  B_dif += random.randrange(-2, 16)
+  if B_dif > 0:
+    B_Color = 'RED'
+  elif B_dif < 0:
+    B_Color = 'BLUE'
+  else:
+    B_Color = 'GRAY'
+  return B + B_dif
 
+Cscheduler = random.randrange(3, 8)
 def Cchange(C, nowt):
-  return C
+  global Cscheduler, C_Color
+  C_dif = 0
+  if Aphase == 'DOWN1':
+    if Cscheduler == 0:
+      C_dif = random.randrange(-20, 101)
+    else:
+      Cscheduler -= 1
+      C_dif = random.randrange(-15, 6)
+  else:
+    C_dif = random.randrange(-15, 6)
+  if C_dif > 0:
+    C_Color = 'RED'
+  elif C_dif < 0:
+    C_Color = 'BLUE'
+  else:
+    C_Color = 'GRAY'
+  return C + C_dif
 
 def Dchange(D, nowt):
+  global D_Color
+  D_dif = 0
+  new_D = 0
   if D == 0:
+    D_Color = 'GRAY'
     return 0
-  nomean = random.random() > 0.5
-  nomean2 = random.random() > 0.4
-  if nomean2:
-    D += random.randrange(-30, 31)
-  elif nomean:
-    D*=1.2
+  dice = random.random()
+  if dice > 0.4:
+    D_dif = random.randrange(-30, 31)
+    if D_dif > 0:
+      D_Color = 'RED'
+    elif D_dif < 0:
+      D_Color = 'BLUE'
+    else:
+      D_Color = 'GRAY'
+    if D + D_dif <= 0:
+      return 0
+    else:
+      new_D = D + D_dif
+  elif dice > 0.2:
+    D_Color = 'RED'
+    new_D = D*1.2
   else:
-    D/=1.2
-  if D <= 0:
-    return 0
-  else:
+    D_Color = 'BLUE'
+    new_D = D/1.2
+  if new_D > 4000 or new_D < 500:
+    D_Color = 'GRAY'
     return D
-  # return D
+  else:
+    return new_D
 
 def Echange(E, nowt):
+  global E_Color
   if E==0:
+    E_Color = 'GRAY'
     return 0
-  if nowt>82:
-    E += random.randrange(-30, 251)
+  if nowt>80:
+    E_dif = random.randrange(-30, 221)
   else:
-    E += random.randrange(-30, 6)
-  if E<=0:
+    E_dif = random.randrange(-30, 6)
+  if E_dif > 0:
+    E_Color = 'RED'
+  elif E_dif < 0:
+    E_Color = 'BLUE'
+  else:
+    E_Color = 'GRAY'
+  if E + E_dif <= 0:
     return 0
   else:
-    return E
+    return E + E_dif
 
 def fluctuation(coindict, nowt):
   A = coindict['AltF4coin']
@@ -96,13 +165,6 @@ def fluctuation(coindict, nowt):
     'Eithereum': E
   }
   return new_dict
-
-# while True:
-#   if int(nowtime:=time.time()-t)%10==0:
-#     fluctuation(coins_dict, nowtime)
-#     time.sleep(2)
-#   if nowtime>40:
-#     break
 
 x = []
 y = []
